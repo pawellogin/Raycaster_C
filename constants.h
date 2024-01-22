@@ -1,18 +1,18 @@
 #ifndef CONSTANTS_H_
 #define CONSTANTS_H_
 
-
-
-
 #define SCREEN_SMALL_HEIGHT 480
 #define SCREEN_SMALL_WIDTH 640
 
-// #define SCREEN_MEDIUM_WIDTH 1366
-// #define SCREEN_MEDIUM_HEIGHT 768
-// #define SCREEN_LARGE_WIDTH 1920
-// #define SCREEN_LARGE_HEIGHT 1080
+typedef enum TILE_TYPE {
+    EMPTY = 0,
+    SOLID = 1
+}TILE_TYPE;
 
-
+typedef enum SIDE {
+    VERTICAL = 0,
+    HORIZONTAL = 0
+} SIDE;
 
 #define MAP_WIDTH 16
 #define MAP_HEIGHT 16
@@ -24,8 +24,5 @@
 #define PLAYER_ROTATION_SPEED (3 * DEG2RAD)
 
 #define NEARBLACK CLITERAL(Color){15,15,15,255}
-
-
-
 
 #endif
