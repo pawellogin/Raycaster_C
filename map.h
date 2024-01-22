@@ -4,18 +4,12 @@
 #include "raylib.h"
 #include "constants.h"
 
-
-typedef enum TILE_TYPE {
-    EMPTY = 0,
-    SOLID = 1
-}TILE_TYPE;
-
 typedef struct Map_t {
     int grid[MAP_HEIGHT][MAP_WIDTH];
 } Map;
 
 Map mapCreate();
-TILE_TYPE mapGiveTileType(Map map, Vector2 position);
+TILE_TYPE mapGiveTileType(int map[MAP_HEIGHT][MAP_WIDTH], Vector2 position);
 
 
 
@@ -45,13 +39,13 @@ Map mapCreate() {
 }
 
 
-TILE_TYPE mapGiveTileType(Map map, Vector2 position){
+TILE_TYPE mapGiveTileType(int map[MAP_HEIGHT][MAP_WIDTH], Vector2 position){
     Vector2 gridPos = {(int)(position.x / MAP_GRID_SIZE),(int)(position.y / MAP_GRID_SIZE)};
 
     int x = gridPos.x;
     int y = gridPos.y;
 
-    return(map.grid[x][y]);
+    return(map[x][y]);
 }
 
 
