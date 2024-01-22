@@ -1,6 +1,8 @@
 #ifndef CONSTANTS_H_
 #define CONSTANTS_H_
 
+#include "raylib.h"
+
 #define SCREEN_SMALL_HEIGHT 480
 #define SCREEN_SMALL_WIDTH 640
 
@@ -11,7 +13,7 @@ typedef enum TILE_TYPE {
 
 typedef enum SIDE {
     VERTICAL = 0,
-    HORIZONTAL = 0
+    HORIZONTAL = 1
 } SIDE;
 
 #define MAP_WIDTH 16
