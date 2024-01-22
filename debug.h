@@ -1,3 +1,6 @@
+#ifndef DEBUG_H
+#define DEBUG_H
+
 #include "raylib.h"
 #include "raymath.h"
 #include "player.h"
@@ -49,7 +52,9 @@ void debugDrawPlayerInfo(Player player,Map map){
     DrawText(angleText,10,30,20,GREEN);
 
     char currentTileText[40];
-    snprintf(currentTileText,sizeof(currentTileText),"Current tile: %d",mapGiveTileType(map,player.position));
+    snprintf(currentTileText,sizeof(currentTileText),"Current tile: %d",mapGiveTileType(map.grid,player.position));
     DrawText(currentTileText,10,50,20,GREEN);
 
 }
+
+#endif

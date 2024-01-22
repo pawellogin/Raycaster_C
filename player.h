@@ -45,7 +45,7 @@ void playerMove(Player * player, Map map){
         newPosition.x = player->position.x + player->direction.x * PLAYER_MOVEMENT_SPEED;
         newPosition.y = player->position.y + player->direction.y * PLAYER_MOVEMENT_SPEED;
 
-        if(mapGiveTileType(map,newPosition) == EMPTY){
+        if(mapGiveTileType(map.grid,newPosition) == EMPTY){
             player->position.x = newPosition.x;
             player->position.y = newPosition.y; 
         }
@@ -54,7 +54,7 @@ void playerMove(Player * player, Map map){
         newPosition.x = player->position.x - player->direction.x * PLAYER_MOVEMENT_SPEED;
         newPosition.y = player->position.y - player->direction.y * PLAYER_MOVEMENT_SPEED;
         
-        if(mapGiveTileType(map,newPosition) == EMPTY){
+        if(mapGiveTileType(map.grid,newPosition) == EMPTY){
             player->position.x = newPosition.x;
             player->position.y = newPosition.y; 
         }
@@ -64,7 +64,7 @@ void playerMove(Player * player, Map map){
         newPosition.x = player->position.x + cos(player->angle - 90 * DEG2RAD) * PLAYER_MOVEMENT_SPEED;
         newPosition.y = player->position.y + sin(player->angle - 90 * DEG2RAD) * PLAYER_MOVEMENT_SPEED;
         
-        if(mapGiveTileType(map,newPosition) == EMPTY){
+        if(mapGiveTileType(map.grid,newPosition) == EMPTY){
             player->position.x = newPosition.x;
             player->position.y = newPosition.y; 
         }
@@ -72,7 +72,7 @@ void playerMove(Player * player, Map map){
         newPosition.x = player->position.x + cos(player->angle + 90 * DEG2RAD) * PLAYER_MOVEMENT_SPEED;
         newPosition.y = player->position.y + sin(player->angle + 90 * DEG2RAD) * PLAYER_MOVEMENT_SPEED;
         
-        if(mapGiveTileType(map,newPosition) == EMPTY){
+        if(mapGiveTileType(map.grid,newPosition) == EMPTY){
             player->position.x = newPosition.x;
             player->position.y = newPosition.y; 
         }
