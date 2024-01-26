@@ -5,9 +5,9 @@
 #include "constants.h"
 #include "map.h"
 
-void raycasterCastRay(float* lenght, TILE_TYPE* tile, SIDE* side, Vector2 direction, Vector2 startPosition, int map[MAP_HEIGHT][MAP_WIDTH]);
+void raycasterCastRay(float* lenght, TILE_TYPE* tile, SIDE* side, Vector2 startPosition, Vector2 direction,  TILE_TYPE map[MAP_HEIGHT][MAP_WIDTH]);
 
-void raycasterCastRay(float* lenght, TILE_TYPE* tile, SIDE* side, Vector2 direction, Vector2 startPosition, int map[MAP_HEIGHT][MAP_WIDTH]){
+void raycasterCastRay(float* lenght, TILE_TYPE* tile, SIDE* side, Vector2 startPosition, Vector2 direction, TILE_TYPE map[MAP_HEIGHT][MAP_WIDTH]){
 
     Vector2 rayUnitStepSize = {
         sqrt(1+(direction.y / direction.x) * (direction.y / direction.x)),
@@ -65,7 +65,7 @@ void raycasterCastRay(float* lenght, TILE_TYPE* tile, SIDE* side, Vector2 direct
         if(mapGiveTileType(map,mapPositionCheck) != 0){
             tileFound = true;
             
-            *tile = mapGiveTileType(map,mapPositionCheck);
+            //*tile = mapGiveTileType(map,mapPositionCheck);
 
             if(rayLenght.x <= rayLenght.y){
                 *lenght = rayLenght.x;

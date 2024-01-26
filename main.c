@@ -32,8 +32,9 @@ int main()
 
         ClearBackground(NEARBLACK);
 
-        debugDrawMiniMap(map.grid,player.position,player.direction);
-        debugDrawPlayerInfo(player,map.grid);
+        debugDrawMiniMap(map.grid, player.position, player.direction);
+        debugDrawPlayerInfo(player.position, player.direction, player.angle, map.grid);
+        debugDrawPlayerRaySingle(player.position, player.direction, map.grid);
 
         //DrawFPS(10, 10);
 
