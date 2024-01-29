@@ -10,6 +10,7 @@
 void debugDrawMiniMap(TILE_TYPE map[MAP_HEIGHT][MAP_WIDTH], Vector2 position, Vector2 direction);
 void debugDrawPlayerInfo(Vector2 position, Vector2 direction, float angle,TILE_TYPE map[MAP_HEIGHT][MAP_WIDTH]);
 void debugDrawPlayerRaySingle(Vector2 position, Vector2 direction, TILE_TYPE map[MAP_HEIGHT][MAP_WIDTH]);
+Vector2 debugConvertToMinimapSize(Vector2 positionToConvert);
 
 
 void debugDrawMiniMap(TILE_TYPE map[MAP_HEIGHT][MAP_WIDTH], Vector2 position, Vector2 direction){
@@ -37,7 +38,7 @@ void debugDrawMiniMap(TILE_TYPE map[MAP_HEIGHT][MAP_WIDTH], Vector2 position, Ve
 
     Vector2 lineEnd = {position.x + MINIMAP_SCALE * direction.x, position.y + MINIMAP_SCALE * direction.y,};
 
-    //DrawLineV(position,lineEnd,GREEN);
+    DrawLineEx(position,lineEnd,2,GREEN);
 }
 
 void debugDrawPlayerInfo(Vector2 position,Vector2 direction, float angle,TILE_TYPE map[MAP_HEIGHT][MAP_WIDTH]){
@@ -46,11 +47,13 @@ void debugDrawPlayerInfo(Vector2 position,Vector2 direction, float angle,TILE_TY
     DrawText(positionText,10,10,20,GREEN);
 
     char angleText[40];
-    snprintf(angleText,sizeof(angleText),"Angle: %.2f",angle);
+    snprintf(angleText,sizeof(angleText),"Angle: %.2f",angle * RAD2DEG);
     DrawText(angleText,10,30,20,GREEN);
 
     char currentTileText[40];
-    snprintf(currentTileText,sizeof(currentTileText),"Current tile: %d",mapGiveTileType(map,position));
+    const float DETECTION_LENGTH = MAP_GRID_SIZE;
+    Vector2 poitingAtPosition = {position.x + DETECTION_LENGTH * direction.x, position.y + DETECTION_LENGTH * direction.y,};
+    snprintf(currentTileText,sizeof(currentTileText),"Poiting at tile: %d",mapGiveTileType(map,poitingAtPosition));
     DrawText(currentTileText,10,50,20,GREEN);
 
     char singleRayLenght[40];
@@ -58,7 +61,7 @@ void debugDrawPlayerInfo(Vector2 position,Vector2 direction, float angle,TILE_TY
     TILE_TYPE _t;
     SIDE _s;
     raycasterCastRay(&lenght,&_t,&_s,position,direction,map);
-    snprintf(singleRayLenght,sizeof(singleRayLenght),"Current tile: %.2f",lenght);
+    snprintf(singleRayLenght,sizeof(singleRayLenght),"Single ray lenght: %.2f",lenght);
     DrawText(singleRayLenght,10,70,20,GREEN);
 }
 
@@ -75,15 +78,21 @@ void debugDrawPlayerRaySingle(Vector2 position, Vector2 direction, TILE_TYPE map
         position.y + direction.y * length
     };
 
-    position.x = (position.x / MAP_GRID_SIZE ) * MINIMAP_SCALE ;
-    position.x += MINIMAP_OFFSET_X;
-    position.y = (position.y / MAP_GRID_SIZE ) * MINIMAP_SCALE;
+    position = debugConvertToMinimapSize(position);
 
-    endPosition.x = (endPosition.x / MAP_GRID_SIZE ) * MINIMAP_SCALE  ;
-    endPosition.x += MINIMAP_OFFSET_X;
-    endPosition.y = (endPosition.y / MAP_GRID_SIZE ) * MINIMAP_SCALE  ;
+    endPosition = debugConvertToMinimapSize(endPosition);
 
     DrawLineV(position,endPosition,GREEN);
+}
+
+Vector2 debugConvertToMinimapSize(Vector2 positionToConvert){
+    positionToConvert.x = (positionToConvert.x / MAP_GRID_SIZE ) * MINIMAP_SCALE ;
+    positionToConvert.x += MINIMAP_OFFSET_X;
+
+    positionToConvert.y = (positionToConvert.y / MAP_GRID_SIZE ) * MINIMAP_SCALE;
+    positionToConvert.y += MINIMAP_OFFSET_Y;
+
+    return positionToConvert;
 }
 
 #endif
