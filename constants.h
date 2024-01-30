@@ -3,8 +3,8 @@
 
 #include "raylib.h"
 
-#define SCREEN_HEIGHT 480
-#define SCREEN_WIDTH 640
+#define SCREEN_HEIGHT 1000
+#define SCREEN_WIDTH 1000
 
 typedef enum TILE_TYPE {
     EMPTY = 0,
@@ -20,7 +20,7 @@ typedef enum SIDE {
 #define MAP_HEIGHT 16
 #define MAP_GRID_SIZE 64
 
-#define MINIMAP_SCALE 20 
+#define MINIMAP_SCALE 10
 #define MINIMAP_OFFSET_X (SCREEN_WIDTH - MINIMAP_SCALE * MAP_WIDTH)
 #define MINIMAP_OFFSET_Y 0 
 
@@ -29,6 +29,8 @@ typedef enum SIDE {
 #define PLAYER_POV (60.0f * DEG2RAD)
 
 #define NEARBLACK CLITERAL(Color){15,15,15,255}
-#define SHADOW_POWER (1.0f/700.0f)
+#define SHADOW_POWER (1.0f/1000.0f)
+
+#define TEXT_COLOR BLACK
 
 #endif

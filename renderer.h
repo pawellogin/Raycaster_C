@@ -8,9 +8,11 @@
 
 Color rendererConvertTileToColor(TILE_TYPE tile);
 Color rendererDarkenColor(Color color, float shadowPower);
-Color rendererChangeToNearblack(Color darkColor);
+Color rendererLimitDarknessTo(Color color, Color limit);
 float rendererConvertToWallSize(TILE_TYPE tile);
-void rendererDrawWalls(Vector2 startPosition, float angle,TILE_TYPE map[MAP_HEIGHT][MAP_WIDTH]);
+void rendererDrawWallsSolidColor(Vector2 startPosition, float angle,TILE_TYPE map[MAP_HEIGHT][MAP_WIDTH]);
+void rendererDrawCelling(Color color);
+void rendererDrawFloor(Color color);
 
 Color rendererConvertTileToColor(TILE_TYPE tile){
     switch (tile)
@@ -26,7 +28,9 @@ Color rendererConvertTileToColor(TILE_TYPE tile){
 }
 
 Color rendererDarkenColor(Color color, float shadowPower) {
-    if(shadowPower > 1) color = NEARBLACK;
+    Color darkColorLimit = {40,40,40,255};
+
+    if(shadowPower > 1) color = darkColorLimit;
     else{
         float shadow = color.r * shadowPower;
         color.r -= shadow;
@@ -37,20 +41,20 @@ Color rendererDarkenColor(Color color, float shadowPower) {
         shadow = color.b * shadowPower;
         color.b -= shadow;
 
-        color = rendererChangeToNearblack(color);
+        color = rendererLimitDarknessTo(color, darkColorLimit);
 
     }
 
     return color;
 }
 
-Color rendererChangeToNearblack(Color darkColor){
-    Color nearblack = darkColor;
-    if(darkColor.r < NEARBLACK.r) nearblack.r = NEARBLACK.r;
-    if(darkColor.g < NEARBLACK.g) nearblack.g = NEARBLACK.g;
-    if(darkColor.b < NEARBLACK.b) nearblack.b = NEARBLACK.b;
+Color rendererLimitDarknessTo(Color color, Color limit){
+    Color result = color;
+    if(result.r < limit.r) result.r = limit.r;
+    if(result.g < limit.g) result.g = limit.g;
+    if(result.b < limit.b) result.b = limit.b;
 
-    return nearblack;
+    return result;
 }
 
 float rendererConvertToWallSize(TILE_TYPE tile){
@@ -69,7 +73,7 @@ float rendererConvertToWallSize(TILE_TYPE tile){
     }
 }
 
-void rendererDrawWalls(Vector2 startPosition, float startAngle,TILE_TYPE map[MAP_HEIGHT][MAP_WIDTH]){
+void rendererDrawWallsSolidColor(Vector2 startPosition, float startAngle,TILE_TYPE map[MAP_HEIGHT][MAP_WIDTH]){
     float rayAngle = startAngle - PLAYER_POV/2;
     Vector2 rayDirection = (Vector2){cos(rayAngle),sin(rayAngle)};
     float rayLength = 0;
@@ -83,13 +87,12 @@ void rendererDrawWalls(Vector2 startPosition, float startAngle,TILE_TYPE map[MAP
     Color wallColor = {0,0,0,255};
 
 
-    for(size_t i = 0; i < SCREEN_WIDTH; i++){
+    for(size_t i = 1; i <= SCREEN_WIDTH; i++){
         raycasterCastRay(&rayLength,&tile, &side, startPosition, rayDirection, map);
         
         drawPosisiton.x = i;
-        drawPosisiton.y = (SCREEN_HEIGHT - drawHeight) / 2;
-
         drawHeight = (SCREEN_HEIGHT / rayLength) * rendererConvertToWallSize(tile);
+        drawPosisiton.y = (SCREEN_HEIGHT - drawHeight) / 2;
 
         if(side == VERTICAL){
             shadowPower = rayLength * SHADOW_POWER;
@@ -107,6 +110,14 @@ void rendererDrawWalls(Vector2 startPosition, float startAngle,TILE_TYPE map[MAP
         rayDirection = (Vector2){cos(rayAngle),sin(rayAngle)};
     }
 
+}
+
+void rendererDrawCelling(Color color){
+    DrawRectangle(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT/2, color);
+}
+
+void rendererDrawFloor(Color color){
+    DrawRectangle(0, SCREEN_HEIGHT/2, SCREEN_WIDTH, SCREEN_HEIGHT/2, color);
 }
 
 
