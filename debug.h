@@ -56,13 +56,13 @@ void debugDrawPlayerInfo(Vector2 position,Vector2 direction, float angle,TILE_TY
     snprintf(currentTileText,sizeof(currentTileText),"Poiting at tile: %d",mapGiveTileType(map,poitingAtPosition));
     DrawText(currentTileText,10,50,20,GREEN);
 
-    char singleRayLenght[40];
-    float lenght = 0;
+    char singleRaylength[40];
+    float length = 0;
     TILE_TYPE _t;
     SIDE _s;
-    raycasterCastRay(&lenght,&_t,&_s,position,direction,map);
-    snprintf(singleRayLenght,sizeof(singleRayLenght),"Single ray lenght: %.2f",lenght);
-    DrawText(singleRayLenght,10,70,20,GREEN);
+    raycasterCastRay(&length,&_t,&_s,position,direction,map);
+    snprintf(singleRaylength,sizeof(singleRaylength),"Single ray length: %.2f",length);
+    DrawText(singleRaylength,10,70,20,GREEN);
 }
 
 void debugDrawPlayerRaySingle(Vector2 position, Vector2 direction, TILE_TYPE map[MAP_HEIGHT][MAP_WIDTH]){

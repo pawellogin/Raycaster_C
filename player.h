@@ -36,7 +36,6 @@ Player playerCreate(){
 
 void playerMove(Player * player, Map map){
 
-    //int offsetX = SCREEN_SMALL_HEIGHT;
     Vector2 newPosition;
 
 

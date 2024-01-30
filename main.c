@@ -1,15 +1,15 @@
 #include "map.h"
 #include "player.h"
 #include "debug.h"
-
+#include "renderer.h"
 
 
 
 int main()
 {
 
-    const int screenWidth = SCREEN_SMALL_WIDTH;
-    const int screenHeight = SCREEN_SMALL_HEIGHT;
+    const int screenWidth = SCREEN_WIDTH;
+    const int screenHeight = SCREEN_HEIGHT;
 
     InitWindow(screenWidth, screenHeight, "raylib");
 
@@ -31,6 +31,8 @@ int main()
         BeginDrawing();
 
         ClearBackground(NEARBLACK);
+
+        rendererDrawWalls(player.position, player.angle, map.grid);
 
         debugDrawMiniMap(map.grid, player.position, player.direction);
         debugDrawPlayerInfo(player.position, player.direction, player.angle, map.grid);
