@@ -16,7 +16,7 @@ Color rendererConvertTileToColor(TILE_TYPE tile){
     switch (tile)
     {
     case SOLID:
-        return LIME;
+        return LIGHTGRAY;
         break;
     
     default:
@@ -30,7 +30,6 @@ Color rendererDarkenColor(Color color, float shadowPower) {
     else{
         float shadow = color.r * shadowPower;
         color.r -= shadow;
-        if(color.r)
 
         shadow = color.g * shadowPower;
         color.g -= shadow;
