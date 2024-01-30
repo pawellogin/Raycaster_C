@@ -5,9 +5,9 @@
 #include "constants.h"
 #include "map.h"
 
-void raycasterCastRay(float* lenght, TILE_TYPE* tile, SIDE* side, Vector2 startPosition, Vector2 direction,  TILE_TYPE map[MAP_HEIGHT][MAP_WIDTH]);
+void raycasterCastRay(float* length, TILE_TYPE* tile, SIDE* side, Vector2 startPosition, Vector2 direction, TILE_TYPE map[MAP_HEIGHT][MAP_WIDTH]);
 
-void raycasterCastRay(float* lenght, TILE_TYPE* tile, SIDE* side, Vector2 startPosition, Vector2 direction, TILE_TYPE map[MAP_HEIGHT][MAP_WIDTH]){
+void raycasterCastRay(float* length, TILE_TYPE* tile, SIDE* side, Vector2 startPosition, Vector2 direction, TILE_TYPE map[MAP_HEIGHT][MAP_WIDTH]){
 
     Vector2 rayUnitStepSize = {
         sqrt(1+(direction.y / direction.x) * (direction.y / direction.x)),
@@ -16,25 +16,25 @@ void raycasterCastRay(float* lenght, TILE_TYPE* tile, SIDE* side, Vector2 startP
 
     Vector2 mapPositionCheck  = {startPosition.x,startPosition.y};
 
-    Vector2 rayLenght = {0.0f,0.0f};
+    Vector2 raylength = {0.0f,0.0f};
 
     Vector2 step = {0.0f,0.0f};
 
     if(direction.x < 0){
         step.x = -1;
-        rayLenght.x = (startPosition.x - mapPositionCheck.x) * rayUnitStepSize.x;
+        raylength.x = (startPosition.x - mapPositionCheck.x) * rayUnitStepSize.x;
     }
     else{
         step.x = 1;
-        rayLenght.x = ((mapPositionCheck.x + 1) - startPosition.x) * rayUnitStepSize.x;
+        raylength.x = ((mapPositionCheck.x + 1) - startPosition.x) * rayUnitStepSize.x;
     }
     if(direction.y < 0){
         step.y = -1;
-        rayLenght.y = (startPosition.y - mapPositionCheck.y) * rayUnitStepSize.y;
+        raylength.y = (startPosition.y - mapPositionCheck.y) * rayUnitStepSize.y;
     }
     else{
         step.y = 1;
-        rayLenght.y = ((mapPositionCheck.y + 1) - startPosition.y) * rayUnitStepSize.y;
+        raylength.y = ((mapPositionCheck.y + 1) - startPosition.y) * rayUnitStepSize.y;
     }
 
     bool tileFound = false;
@@ -45,38 +45,35 @@ void raycasterCastRay(float* lenght, TILE_TYPE* tile, SIDE* side, Vector2 startP
 
     while(!tileFound && distance < maxDistance){
 
-        if(rayLenght.x < rayLenght.y){
+        if(raylength.x < raylength.y){
             mapPositionCheck.x +=step.x;
-            distance = rayLenght.x;
-            rayLenght.x += rayUnitStepSize.x;
+            distance = raylength.x;
+            raylength.x += rayUnitStepSize.x;
             axis = 0;
         }
         else{
             mapPositionCheck.y += step.y;
-            distance = rayLenght.y;
-            rayLenght.y += rayUnitStepSize.y; 
+            distance = raylength.y;
+            raylength.y += rayUnitStepSize.y; 
             axis = 1;            
         }
-        
-
-        mapPositionCheck.x /= MAP_GRID_SIZE;
-        mapPositionCheck.y /= MAP_GRID_SIZE;
 
         if(mapGiveTileType(map,mapPositionCheck) != 0){
             tileFound = true;
             
-            //*tile = mapGiveTileType(map,mapPositionCheck);
+            *tile = mapGiveTileType(map,mapPositionCheck);
 
-            if(rayLenght.x <= rayLenght.y){
-                *lenght = rayLenght.x;
+            if(raylength.x <= raylength.y){
+                *length = raylength.x;
                 *side = (SIDE)axis;
             }else{
-                *lenght = rayLenght.y;
+                *length = raylength.y;
                 *side = (SIDE)axis;
             }  
         }
     }  
 }
+
 
 
 #endif
