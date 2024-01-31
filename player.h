@@ -14,18 +14,17 @@ typedef struct Player_t {
     float angle;
 }Player;
 
-Player playerCreate();
+float playerFOV = 60 * DEG2RAD;
 
+Player playerCreate();
 void playerMove(Player * player,Map map);
 void playerRotate(Player* player);
-
-
-
+void playerChangeFOV();
 
 Player playerCreate(){
     return(Player){
-        .position.x = 100,
-        .position.y = 100,
+        .position.x = 253,
+        .position.y = 160,
         .direction.x = 1,
         .direction.y = 0,
         .angle = 0
@@ -96,7 +95,14 @@ void playerRotate(Player* player) {
     player->direction.y = sin(player->angle);
 }
 
-
+void playerChangeFOV(){
+    const float changeSpeed = 0.05f; 
+    if(IsKeyDown(KEY_EQUAL) && playerFOV < 180 * DEG2RAD){
+        playerFOV += changeSpeed;
+    } else if(IsKeyDown(KEY_MINUS) && playerFOV > 15 * DEG2RAD){
+        playerFOV -= changeSpeed;
+    }
+}
 
 
 

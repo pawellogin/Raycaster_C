@@ -25,6 +25,7 @@ int main()
 
         playerMove(&player,map);
         playerRotate(&player); 
+        playerChangeFOV();
         isDebugMenuOn = IsKeyDown(KEY_F3);
         
         BeginDrawing();

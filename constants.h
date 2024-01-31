@@ -3,18 +3,26 @@
 
 #include "raylib.h"
 
-#define SCREEN_HEIGHT 1000
-#define SCREEN_WIDTH 1000
+#define SCREEN_HEIGHT 900
+#define SCREEN_WIDTH 1600
 
 typedef enum TILE_TYPE {
     EMPTY = 0,
-    SOLID = 1
+    SOLID = 1,
+    BARRIER = 2,
+    GLASS = 3
 }TILE_TYPE;
 
 typedef enum SIDE {
     VERTICAL = 0,
     HORIZONTAL = 1
 } SIDE;
+
+typedef struct WallToPrint_t {
+    TILE_TYPE tile;
+    float lenght;
+    SIDE side;
+} WallToPrint;
 
 #define MAP_WIDTH 16
 #define MAP_HEIGHT 16
