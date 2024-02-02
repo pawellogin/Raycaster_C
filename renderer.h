@@ -5,21 +5,22 @@
 #include "constants.h"
 #include "raycaster.h"
 #include <math.h>
-#include <stdlib.h>
 
 Color rendererConvertTileToColor(TILE_TYPE tile);
 Color rendererDarkenColor(Color color, float shadowPower);
 Color rendererLimitDarknessTo(Color color, Color limit);
 float rendererConvertToWallSize(TILE_TYPE tile);
 void rendererDrawWallsSolidColor(Vector2 startPosition, float angle,TILE_TYPE map[MAP_HEIGHT][MAP_WIDTH]);
-void rendererDrawCelling(Color color);
+void rendererDrawCeling(Color color);
 void rendererDrawFloor(Color color);
-
-
 
 Color rendererConvertTileToColor(TILE_TYPE tile){
     switch (tile)
     {
+    case EMPTY:
+        return BLANK;
+        break;
+
     case SOLID:
         return LIGHTGRAY;
         break;
@@ -27,9 +28,10 @@ Color rendererConvertTileToColor(TILE_TYPE tile){
     case BARRIER:
         return BLANK;
         break;
-
+    
     case GLASS:
-        return (Color){20,40,230,60};
+        return (Color){20,60,220,60};
+        break;
     
     default:
         return RED;
@@ -75,10 +77,10 @@ float rendererConvertToWallSize(TILE_TYPE tile){
         break;
 
     case SOLID: 
-        return 50.0f;
-    
+        return 1.0f;
+
     case GLASS:
-        return 50.0f;
+        return 1.0f;
 
     default:
         return 0.0f;
@@ -94,51 +96,38 @@ void rendererDrawWallsSolidColor(Vector2 startPosition, float startAngle,TILE_TY
     TILE_TYPE tile = EMPTY;
     SIDE side = VERTICAL;
 
-    WallToPrint walls[16];
-    int wallsNumberOf = 0;
-
     Vector2 drawPosisiton = {0.0f,0.0f};
     float drawHeight = 0.0f;
     float shadowPower = 0.0f;
     Color wallColor = {0,0,0,255};
 
-    for(int i = 1; i <= SCREEN_WIDTH; i++){
-        wallsNumberOf = 0;
 
-        raycasterCastRay(&rayLength,&tile, &side, startPosition, rayDirection, map, walls, &wallsNumberOf);
+    for(size_t i = 1; i <= SCREEN_WIDTH; i++){
+        raycasterCastRay(&rayLength,&tile, &side, startPosition, rayDirection, map);
         
-        for(int j = wallsNumberOf-1; j >= 0; j--){
+        drawPosisiton.x = i;
+        drawHeight = (SCREEN_HEIGHT / rayLength) * rendererConvertToWallSize(tile);
+        drawPosisiton.y = (SCREEN_HEIGHT - drawHeight) / 2;
 
-            rayLength = walls[j].lenght;
-            tile = walls[j].tile;
-            side = walls[j].side;
-
-            drawPosisiton.x = i;
-            drawHeight = (SCREEN_HEIGHT / rayLength) * rendererConvertToWallSize(tile);
-            drawPosisiton.y = (SCREEN_HEIGHT - drawHeight) / 2;
-
-            if(side == VERTICAL){
-                shadowPower = rayLength * SHADOW_POWER;
-            }
-            else if(side == HORIZONTAL) {
-                shadowPower = rayLength * (SHADOW_POWER * 1.2);
-            }
-            wallColor = rendererConvertTileToColor(tile);
-            wallColor = rendererDarkenColor(wallColor,shadowPower);
-
-            DrawRectangleV(drawPosisiton, (Vector2){1,drawHeight}, wallColor);
-
-            float rayAngleStepSize = playerFOV / SCREEN_WIDTH;
-            rayAngle += rayAngleStepSize;
-            rayDirection = (Vector2){cos(rayAngle),sin(rayAngle)};
-
+        if(side == VERTICAL){
+            shadowPower = rayLength * SHADOW_POWER;
         }
+        else if(side == HORIZONTAL) {
+            shadowPower = rayLength * (SHADOW_POWER * 3);
+        }
+        wallColor = rendererConvertTileToColor(tile);
+        wallColor = rendererDarkenColor(wallColor,shadowPower);
+
+        DrawRectangleV(drawPosisiton, (Vector2){1,drawHeight}, wallColor);
+
+        float rayAngleStepSize = playerFOV / SCREEN_WIDTH;
+        rayAngle += rayAngleStepSize;
+        rayDirection = (Vector2){cos(rayAngle),sin(rayAngle)};
     }
 
 }
 
-
-void rendererDrawCelling(Color color){
+void rendererDrawCeling(Color color){
     DrawRectangle(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT/2, color);
 }
 
