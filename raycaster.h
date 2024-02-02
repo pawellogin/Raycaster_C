@@ -2,12 +2,17 @@
 #define RAYCASTER_C
 
 #include <math.h>
+#include <stdlib.h>
 #include "constants.h"
+#include "structures.h"
 #include "map.h"
 
-void raycasterCastRay(float* length, TILE_TYPE* tile, SIDE* side, Vector2 startPosition, Vector2 direction, TILE_TYPE map[MAP_HEIGHT][MAP_WIDTH]);
+TileToDraw* raycasterCastRay(float* length, TILE_TYPE* tile, SIDE* side, Vector2 startPosition, Vector2 direction, TILE_TYPE map[MAP_HEIGHT][MAP_WIDTH], size_t* tileArraySize);
 
-void raycasterCastRay(float* length, TILE_TYPE* tile, SIDE* side, Vector2 startPosition, Vector2 direction, TILE_TYPE map[MAP_HEIGHT][MAP_WIDTH]){
+TileToDraw* raycasterCastRay(float* length, TILE_TYPE* tile, SIDE* side, Vector2 startPosition, Vector2 direction, TILE_TYPE map[MAP_HEIGHT][MAP_WIDTH], size_t* tileArraySize){
+
+    TileToDraw* tileArray = (TileToDraw*)malloc(TILE_BUFFER_SIZE * sizeof(TileToDraw));
+    size_t tileArrayId = 0;
 
     Vector2 rayUnitStepSize = {
         sqrt(1+(direction.y / direction.x) * (direction.y / direction.x)),
@@ -38,8 +43,9 @@ void raycasterCastRay(float* length, TILE_TYPE* tile, SIDE* side, Vector2 startP
     }
 
     bool tileFound = false;
-    float maxDistance = 100.0f;
+    float maxDistance = 20.0f;
     float distance = 0.0f;
+    TILE_TYPE tileToCheck;
 
     int axis = 0;
 
@@ -59,20 +65,31 @@ void raycasterCastRay(float* length, TILE_TYPE* tile, SIDE* side, Vector2 startP
             axis = 1;            
         }
 
-        if(mapGiveTileType(map,mapPositionCheck) != 0){
+        tileToCheck = mapGiveTileType(map, mapPositionCheck);
+
+        if(tileToCheck == GLASS){
+            tileArray[tileArrayId].rayLenght = distance;
+            tileArray[tileArrayId].side = (SIDE)axis;
+            tileArray[tileArrayId].tile = tileToCheck;
+
+            tileArrayId++;   
+
+        }else if(tileToCheck != EMPTY){
             tileFound = true;
             
-            *tile = mapGiveTileType(map,mapPositionCheck);
+            tileArray[tileArrayId].rayLenght = distance;
+            tileArray[tileArrayId].side = (SIDE)axis;
+            tileArray[tileArrayId].tile = tileToCheck;
 
-            if(raylength.x <= raylength.y){
-                *length = distance;
-                *side = (SIDE)axis;
-            }else{
-                *length = distance;
-                *side = (SIDE)axis;
-            }  
+            tileArrayId++;            
+
+            //*tile = mapGiveTileType(map,mapPositionCheck);
+            //*length = distance;
+            //*side = (SIDE)axis;  
+            return tileArray;
         }
-    }  
+    } 
+     return NULL;
 }
 
 
