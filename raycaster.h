@@ -68,7 +68,7 @@ TileToDraw* raycasterCastRay(float* length, TILE_TYPE* tile, SIDE* side, Vector2
         tileToCheck = mapGiveTileType(map, mapPositionCheck);
 
         if(tileToCheck == GLASS){
-            tileArray[tileArrayId].rayLenght = distance;
+            tileArray[tileArrayId].rayLength = distance;
             tileArray[tileArrayId].side = (SIDE)axis;
             tileArray[tileArrayId].tile = tileToCheck;
 
@@ -77,7 +77,7 @@ TileToDraw* raycasterCastRay(float* length, TILE_TYPE* tile, SIDE* side, Vector2
         }else if(tileToCheck != EMPTY){
             tileFound = true;
             
-            tileArray[tileArrayId].rayLenght = distance;
+            tileArray[tileArrayId].rayLength = distance;
             tileArray[tileArrayId].side = (SIDE)axis;
             tileArray[tileArrayId].tile = tileToCheck;
 
@@ -85,7 +85,8 @@ TileToDraw* raycasterCastRay(float* length, TILE_TYPE* tile, SIDE* side, Vector2
 
             //*tile = mapGiveTileType(map,mapPositionCheck);
             //*length = distance;
-            //*side = (SIDE)axis;  
+            //*side = (SIDE)axis;
+            *tileArraySize = tileArrayId;
             return tileArray;
         }
     } 

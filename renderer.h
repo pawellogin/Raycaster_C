@@ -3,8 +3,10 @@
 
 #include "raylib.h"
 #include "constants.h"
+#include "structures.h"
 #include "raycaster.h"
 #include <math.h>
+
 
 Color rendererConvertTileToColor(TILE_TYPE tile);
 Color rendererDarkenColor(Color color, float shadowPower);
@@ -101,24 +103,32 @@ void rendererDrawWallsSolidColor(Vector2 startPosition, float startAngle,TILE_TY
     float shadowPower = 0.0f;
     Color wallColor = {0,0,0,255};
 
+    TileToDraw* tileArray = NULL;
+    size_t tileArraySize = 0;
 
     for(size_t i = 1; i <= SCREEN_WIDTH; i++){
-        raycasterCastRay(&rayLength,&tile, &side, startPosition, rayDirection, map);
+        tileArray = raycasterCastRay(&rayLength, &tile, &side, startPosition, rayDirection, map, &tileArraySize);
         
-        drawPosisiton.x = i;
-        drawHeight = (SCREEN_HEIGHT / rayLength) * rendererConvertToWallSize(tile);
-        drawPosisiton.y = (SCREEN_HEIGHT - drawHeight) / 2;
+        for(size_t j = tileArraySize - 1; j > 0; j--){
+            drawPosisiton.x = i;
+            drawHeight = (SCREEN_HEIGHT / tileArray[j].rayLength) * rendererConvertToWallSize(tile);
+            drawPosisiton.y = (SCREEN_HEIGHT - tileArray[j].rayLength) / 2;
 
-        if(side == VERTICAL){
-            shadowPower = rayLength * SHADOW_POWER;
-        }
-        else if(side == HORIZONTAL) {
-            shadowPower = rayLength * (SHADOW_POWER * 3);
-        }
-        wallColor = rendererConvertTileToColor(tile);
-        wallColor = rendererDarkenColor(wallColor,shadowPower);
+            if(tileArray[j].side == VERTICAL){
+                shadowPower = tileArray[j].rayLength * SHADOW_POWER;
+            }
+            else if(tileArray[j].side == HORIZONTAL) {
+                shadowPower = tileArray[j].rayLength * (SHADOW_POWER * 3);
+            }
+            wallColor = rendererConvertTileToColor(tileArray[j].tile);
+            wallColor = rendererDarkenColor(wallColor,shadowPower);
 
-        DrawRectangleV(drawPosisiton, (Vector2){1,drawHeight}, wallColor);
+            DrawRectangleV(drawPosisiton, (Vector2){1,drawHeight}, wallColor);
+        }
+
+        if(tileArray != NULL){
+            free(tileArray);
+        }
 
         float rayAngleStepSize = playerFOV / SCREEN_WIDTH;
         rayAngle += rayAngleStepSize;

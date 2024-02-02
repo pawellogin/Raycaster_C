@@ -36,4 +36,6 @@ typedef enum SIDE {
 
 #define TEXT_COLOR BLACK
 
+#define TILE_BUFFER_SIZE 16
+
 #endif

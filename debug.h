@@ -84,7 +84,7 @@ void debugDrawInfo(Vector2 position,Vector2 direction, float angle,TILE_TYPE map
     float length = 0;
     TILE_TYPE _t;
     SIDE _s;
-    raycasterCastRay(&length,&_t,&_s,position,direction,map);
+    //raycasterCastRay(&length,&_t,&_s,position,direction,map);
     snprintf(singleRaylength,sizeof(singleRaylength),"Single ray length: %.2f",length);
     DrawText(singleRaylength,drawPos.x ,drawPos.y + (textSpacing * textNumber), fontSize,TEXT_COLOR);
     textNumber++;
@@ -96,7 +96,7 @@ void debugDrawPlayerRaySingle(Vector2 position, Vector2 direction, TILE_TYPE map
     TILE_TYPE tile = EMPTY;
     SIDE side = HORIZONTAL;
 
-    raycasterCastRay(&length, &tile, &side, position, direction, map);
+    //raycasterCastRay(&length, &tile, &side, position, direction, map);
 
     Vector2 endPosition = {
         position.x + direction.x * length,
@@ -122,7 +122,7 @@ void debugDrawPlayerRayMulti(Vector2 startPosition, float startAngle, TILE_TYPE 
 
 
     for(size_t i = 1; i <= SCREEN_WIDTH; i++){
-        raycasterCastRay(&rayLength,&tile, &side, startPosition, rayDirection, map);
+        //raycasterCastRay(&rayLength,&tile, &side, startPosition, rayDirection, map);
         
         Vector2 endPosition = {
         startPosition.x + rayDirection.x * rayLength,

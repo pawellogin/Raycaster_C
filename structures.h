@@ -7,7 +7,7 @@ typedef struct TileToDraw_t TileToDraw;
 
 typedef struct TileToDraw_t
 {
-    float rayLenght;
+    float rayLength;
     TILE_TYPE tile;
     SIDE side;   
 }TileToDraw;
