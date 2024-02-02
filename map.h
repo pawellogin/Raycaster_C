@@ -39,14 +39,22 @@ Map mapCreate() {
 }
 
 
-TILE_TYPE mapGiveTileType(TILE_TYPE map[MAP_HEIGHT][MAP_WIDTH], Vector2 position){
-    Vector2 gridPos = {(int)(position.x / MAP_GRID_SIZE),(int)(position.y / MAP_GRID_SIZE)};
+TILE_TYPE mapGiveTileType(TILE_TYPE map[MAP_HEIGHT][MAP_WIDTH], Vector2 position) {
+    Vector2 gridPos = {
+        position.x,
+        position.y 
+    };
 
-    int x = gridPos.x;
-    int y = gridPos.y;
+    int x = (int)gridPos.x;
+    int y = (int)gridPos.y;
 
-    return(map[x][y]);
+    if (x >= 0 && x < MAP_WIDTH && y >= 0 && y < MAP_HEIGHT) {
+        return map[x][y];  
+    } else {
+        return ERROR;
+    }
 }
+
 
 
 #endif 
