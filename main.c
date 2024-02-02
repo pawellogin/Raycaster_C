@@ -25,22 +25,23 @@ int main()
 
         playerMove(&player,map);
         playerRotate(&player); 
+        playerChangeFOV();
         isDebugMenuOn = IsKeyDown(KEY_F3);
         
         BeginDrawing();
 
         ClearBackground(NEARBLACK);
 
-        rendererDrawCelling(SKYBLUE);
-        rendererDrawFloor(BEIGE);
+        rendererDrawCeling(CEILING_COLOR);
+        rendererDrawFloor(FLOOR_COLOR);
         rendererDrawWallsSolidColor(player.position, player.angle, map.grid);
 
         if(isDebugMenuOn){
-            debugDrawMiniMap(map.grid, player.position, player.direction);
-            debugDrawPlayerInfo(player.position, player.direction, player.angle, map.grid);
-            debugDrawPlayerRaySingle(player.position, player.direction, map.grid);
+            debugDrawMiniMap(player.position, player.direction, map.grid);
+            debugDrawPlayerOnMiniMap(player.position, player.direction, map.grid);
+            debugDrawInfo(player.position, player.direction, player.angle, map.grid);
+            debugDrawPlayerRayMulti(player.position, player.angle, map.grid);
 
-            //DrawFPS(10, 10);
         }
 
         EndDrawing();

@@ -18,17 +18,17 @@ Player playerCreate();
 
 void playerMove(Player * player,Map map);
 void playerRotate(Player* player);
+void playerChangeFOV();
 
-
-
+float playerFOV = 60 * DEG2RAD;
 
 Player playerCreate(){
     return(Player){
-        .position.x = 100,
-        .position.y = 100,
-        .direction.x = 1,
+        .position.x = 3,
+        .position.y = 3.65f,
+        .direction.x = 0,
         .direction.y = 0,
-        .angle = 0
+        .angle = 60 * DEG2RAD
     };
 }
 
@@ -94,6 +94,15 @@ void playerRotate(Player* player) {
 
     player->direction.x = cos(player->angle);
     player->direction.y = sin(player->angle);
+}
+
+void playerChangeFOV(){
+    const float changeSpeed = 0.05f; 
+    if(IsKeyDown(KEY_EQUAL) && playerFOV < 180 * DEG2RAD){
+        playerFOV += changeSpeed;
+    } else if(IsKeyDown(KEY_MINUS) && playerFOV > 15 * DEG2RAD){
+        playerFOV -= changeSpeed;
+    }
 }
 
 

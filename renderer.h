@@ -11,14 +11,26 @@ Color rendererDarkenColor(Color color, float shadowPower);
 Color rendererLimitDarknessTo(Color color, Color limit);
 float rendererConvertToWallSize(TILE_TYPE tile);
 void rendererDrawWallsSolidColor(Vector2 startPosition, float angle,TILE_TYPE map[MAP_HEIGHT][MAP_WIDTH]);
-void rendererDrawCelling(Color color);
+void rendererDrawCeling(Color color);
 void rendererDrawFloor(Color color);
 
 Color rendererConvertTileToColor(TILE_TYPE tile){
     switch (tile)
     {
+    case EMPTY:
+        return BLANK;
+        break;
+
     case SOLID:
         return LIGHTGRAY;
+        break;
+
+    case BARRIER:
+        return BLANK;
+        break;
+    
+    case GLASS:
+        return (Color){20,60,220,60};
         break;
     
     default:
@@ -65,7 +77,10 @@ float rendererConvertToWallSize(TILE_TYPE tile){
         break;
 
     case SOLID: 
-        return 50.0f;
+        return 1.0f;
+
+    case GLASS:
+        return 1.0f;
 
     default:
         return 0.0f;
@@ -74,7 +89,7 @@ float rendererConvertToWallSize(TILE_TYPE tile){
 }
 
 void rendererDrawWallsSolidColor(Vector2 startPosition, float startAngle,TILE_TYPE map[MAP_HEIGHT][MAP_WIDTH]){
-    float rayAngle = startAngle - PLAYER_POV/2;
+    float rayAngle = startAngle - playerFOV/2;
     Vector2 rayDirection = (Vector2){cos(rayAngle),sin(rayAngle)};
     float rayLength = 0;
 
@@ -98,21 +113,21 @@ void rendererDrawWallsSolidColor(Vector2 startPosition, float startAngle,TILE_TY
             shadowPower = rayLength * SHADOW_POWER;
         }
         else if(side == HORIZONTAL) {
-            shadowPower = rayLength * (SHADOW_POWER * 1.2);
+            shadowPower = rayLength * (SHADOW_POWER * 3);
         }
         wallColor = rendererConvertTileToColor(tile);
         wallColor = rendererDarkenColor(wallColor,shadowPower);
 
         DrawRectangleV(drawPosisiton, (Vector2){1,drawHeight}, wallColor);
 
-        float rayAngleStepSize = PLAYER_POV / SCREEN_WIDTH;
+        float rayAngleStepSize = playerFOV / SCREEN_WIDTH;
         rayAngle += rayAngleStepSize;
         rayDirection = (Vector2){cos(rayAngle),sin(rayAngle)};
     }
 
 }
 
-void rendererDrawCelling(Color color){
+void rendererDrawCeling(Color color){
     DrawRectangle(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT/2, color);
 }
 

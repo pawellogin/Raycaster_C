@@ -14,7 +14,7 @@ void raycasterCastRay(float* length, TILE_TYPE* tile, SIDE* side, Vector2 startP
         sqrt(1+(direction.x / direction.y) * (direction.x / direction.y))
         };
 
-    Vector2 mapPositionCheck  = {startPosition.x,startPosition.y};
+    Vector2 mapPositionCheck  = {(int)startPosition.x,(int)startPosition.y};
 
     Vector2 raylength = {0.0f,0.0f};
 
@@ -22,28 +22,29 @@ void raycasterCastRay(float* length, TILE_TYPE* tile, SIDE* side, Vector2 startP
 
     if(direction.x < 0){
         step.x = -1;
-        raylength.x = (startPosition.x - mapPositionCheck.x) * rayUnitStepSize.x;
+        raylength.x = (startPosition.x - (float)(mapPositionCheck.x)) * rayUnitStepSize.x;
     }
     else{
         step.x = 1;
-        raylength.x = ((mapPositionCheck.x + 1) - startPosition.x) * rayUnitStepSize.x;
+        raylength.x = ((float)(mapPositionCheck.x + 1) - startPosition.x) * rayUnitStepSize.x;
     }
     if(direction.y < 0){
         step.y = -1;
-        raylength.y = (startPosition.y - mapPositionCheck.y) * rayUnitStepSize.y;
+        raylength.y = (startPosition.y - (float)(mapPositionCheck.y)) * rayUnitStepSize.y;
     }
     else{
         step.y = 1;
-        raylength.y = ((mapPositionCheck.y + 1) - startPosition.y) * rayUnitStepSize.y;
+        raylength.y = ((float)(mapPositionCheck.y + 1) - startPosition.y) * rayUnitStepSize.y;
     }
 
     bool tileFound = false;
-    float maxDistance = 1000.0f;
+    float maxDistance = 100.0f;
     float distance = 0.0f;
 
     int axis = 0;
 
     while(!tileFound && distance < maxDistance){
+
 
         if(raylength.x < raylength.y){
             mapPositionCheck.x +=step.x;
@@ -64,10 +65,10 @@ void raycasterCastRay(float* length, TILE_TYPE* tile, SIDE* side, Vector2 startP
             *tile = mapGiveTileType(map,mapPositionCheck);
 
             if(raylength.x <= raylength.y){
-                *length = raylength.x;
+                *length = distance;
                 *side = (SIDE)axis;
             }else{
-                *length = raylength.y;
+                *length = distance;
                 *side = (SIDE)axis;
             }  
         }
