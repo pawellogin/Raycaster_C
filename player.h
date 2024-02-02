@@ -14,20 +14,21 @@ typedef struct Player_t {
     float angle;
 }Player;
 
-float playerFOV = 60 * DEG2RAD;
-
 Player playerCreate();
+
 void playerMove(Player * player,Map map);
 void playerRotate(Player* player);
 void playerChangeFOV();
 
+float playerFOV = 60 * DEG2RAD;
+
 Player playerCreate(){
     return(Player){
-        .position.x = 253,
-        .position.y = 160,
-        .direction.x = 1,
+        .position.x = 3,
+        .position.y = 3.65f,
+        .direction.x = 0,
         .direction.y = 0,
-        .angle = 0
+        .angle = 60 * DEG2RAD
     };
 }
 
@@ -103,6 +104,8 @@ void playerChangeFOV(){
         playerFOV -= changeSpeed;
     }
 }
+
+
 
 
 
