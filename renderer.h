@@ -109,10 +109,10 @@ void rendererDrawWallsSolidColor(Vector2 startPosition, float startAngle,TILE_TY
     for(size_t i = 1; i <= SCREEN_WIDTH; i++){
         tileArray = raycasterCastRay(&rayLength, &tile, &side, startPosition, rayDirection, map, &tileArraySize);
         
-        for(size_t j = tileArraySize - 1; j > 0; j--){
+        for(size_t j = tileArraySize - 1; j != SIZE_MAX; j--){
             drawPosisiton.x = i;
-            drawHeight = (SCREEN_HEIGHT / tileArray[j].rayLength) * rendererConvertToWallSize(tile);
-            drawPosisiton.y = (SCREEN_HEIGHT - tileArray[j].rayLength) / 2;
+            drawHeight = (SCREEN_HEIGHT / tileArray[j].rayLength) * rendererConvertToWallSize(tileArray[j].tile);
+            drawPosisiton.y = (SCREEN_HEIGHT - drawHeight) / 2;
 
             if(tileArray[j].side == VERTICAL){
                 shadowPower = tileArray[j].rayLength * SHADOW_POWER;
