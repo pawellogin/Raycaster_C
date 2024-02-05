@@ -93,10 +93,6 @@ float rendererConvertToWallSize(TILE_TYPE tile){
 void rendererDrawWallsSolidColor(Vector2 startPosition, float startAngle,TILE_TYPE map[MAP_HEIGHT][MAP_WIDTH]){
     float rayAngle = startAngle - playerFOV/2;
     Vector2 rayDirection = (Vector2){cos(rayAngle),sin(rayAngle)};
-    float rayLength = 0;
-
-    TILE_TYPE tile = EMPTY;
-    SIDE side = VERTICAL;
 
     Vector2 drawPosisiton = {0.0f,0.0f};
     float drawHeight = 0.0f;
@@ -105,11 +101,25 @@ void rendererDrawWallsSolidColor(Vector2 startPosition, float startAngle,TILE_TY
 
     TileToDraw* tileArray = NULL;
     size_t tileArraySize = 0;
+    bool wallsConnected = false;
 
-    for(size_t i = 1; i <= SCREEN_WIDTH; i++){
-        tileArray = raycasterCastRay(&rayLength, &tile, &side, startPosition, rayDirection, map, &tileArraySize);
+    for(size_t i = 0; i < SCREEN_WIDTH; i++){
+        tileArray = raycasterCastRay(startPosition, rayDirection, map, &tileArraySize);
         
         for(size_t j = tileArraySize - 1; j != SIZE_MAX; j--){
+
+            if (j >= 1) {
+            if ((abs(tileArray[j].cords.x - tileArray[j-1].cords.x) <= 1) && (abs(tileArray[j].cords.y - tileArray[j-1].cords.y) <= 1) && ((tileArray[j].cords.x == tileArray[j-1].cords.x) || (tileArray[j].cords.y == tileArray[j-1].cords.y))) {
+                    wallsConnected = true;
+                }else {
+                    wallsConnected = false;
+                }
+            } 
+
+            if(j >= 1 && tileArray[j-1].tile == GLASS && tileArray[j].tile == GLASS && wallsConnected){
+                continue;
+            }
+
             drawPosisiton.x = i;
             drawHeight = (SCREEN_HEIGHT / tileArray[j].rayLength) * rendererConvertToWallSize(tileArray[j].tile);
             drawPosisiton.y = (SCREEN_HEIGHT - drawHeight) / 2;

@@ -3,6 +3,7 @@
 
 #include "raylib.h"
 #include "constants.h"
+#include "structures.h"
 #include "map.h"
 #include <math.h>
 #include <stdio.h>

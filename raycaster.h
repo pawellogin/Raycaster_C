@@ -7,9 +7,9 @@
 #include "structures.h"
 #include "map.h"
 
-TileToDraw* raycasterCastRay(float* length, TILE_TYPE* tile, SIDE* side, Vector2 startPosition, Vector2 direction, TILE_TYPE map[MAP_HEIGHT][MAP_WIDTH], size_t* tileArraySize);
+TileToDraw* raycasterCastRay(Vector2 startPosition, Vector2 direction, TILE_TYPE map[MAP_HEIGHT][MAP_WIDTH], size_t* tileArraySize);
 
-TileToDraw* raycasterCastRay(float* length, TILE_TYPE* tile, SIDE* side, Vector2 startPosition, Vector2 direction, TILE_TYPE map[MAP_HEIGHT][MAP_WIDTH], size_t* tileArraySize){
+TileToDraw* raycasterCastRay(Vector2 startPosition, Vector2 direction, TILE_TYPE map[MAP_HEIGHT][MAP_WIDTH], size_t* tileArraySize){
 
     TileToDraw* tileArray = (TileToDraw*)malloc(TILE_BUFFER_SIZE * sizeof(TileToDraw));
     size_t tileArrayId = 0;
@@ -71,6 +71,9 @@ TileToDraw* raycasterCastRay(float* length, TILE_TYPE* tile, SIDE* side, Vector2
             tileArray[tileArrayId].rayLength = distance;
             tileArray[tileArrayId].side = (SIDE)axis;
             tileArray[tileArrayId].tile = tileToCheck;
+            tileArray[tileArrayId].cords.x = (int)(mapPositionCheck.x);
+            tileArray[tileArrayId].cords.y = (int)(mapPositionCheck.y);
+
 
             tileArrayId++;   
 
@@ -80,12 +83,12 @@ TileToDraw* raycasterCastRay(float* length, TILE_TYPE* tile, SIDE* side, Vector2
             tileArray[tileArrayId].rayLength = distance;
             tileArray[tileArrayId].side = (SIDE)axis;
             tileArray[tileArrayId].tile = tileToCheck;
+            tileArray[tileArrayId].cords.x = (int)(mapPositionCheck.x);
+            tileArray[tileArrayId].cords.y = (int)(mapPositionCheck.y);
+
 
             tileArrayId++;            
 
-            //*tile = mapGiveTileType(map,mapPositionCheck);
-            //*length = distance;
-            //*side = (SIDE)axis;
             *tileArraySize = tileArrayId;
             return tileArray;
         }

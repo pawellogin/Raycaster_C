@@ -6,19 +6,6 @@
 #define SCREEN_HEIGHT 1000
 #define SCREEN_WIDTH 1600
 
-typedef enum TILE_TYPE {
-    ERROR = -1,
-    EMPTY = 0,
-    SOLID = 1,
-    BARRIER = 2,
-    GLASS = 3
-}TILE_TYPE;
-
-typedef enum SIDE {
-    VERTICAL = 0,
-    HORIZONTAL = 1
-} SIDE;
-
 #define MAP_WIDTH 16
 #define MAP_HEIGHT 16
 
