@@ -4,6 +4,7 @@
 #include "raylib.h"
 #include "raymath.h"
 #include "constants.h"
+#include "structures.h"
 #include "raycaster.h"
 #include "renderer.h"
 #include <math.h>
@@ -73,67 +74,79 @@ void debugDrawInfo(Vector2 position,Vector2 direction, float angle,TILE_TYPE map
     DrawText(angleText,drawPos.x, drawPos.y + (textSpacing * textNumber), fontSize,TEXT_COLOR);
     textNumber++;
 
-    char currentTileText[40];
-    const float DETECTION_LENGTH = 1;
-    Vector2 poitingAtPosition = {position.x + DETECTION_LENGTH * direction.x, position.y + DETECTION_LENGTH * direction.y,};
-    snprintf(currentTileText,sizeof(currentTileText),"Poiting at tile: %d",mapGiveTileType(map,poitingAtPosition));
-    DrawText(currentTileText,drawPos.x ,drawPos.y + (textSpacing * textNumber), fontSize,TEXT_COLOR);
-    textNumber++;
-
     char singleRaylength[40];
-    float length = 0;
-    TILE_TYPE _t;
-    SIDE _s;
-    //raycasterCastRay(&length,&_t,&_s,position,direction,map);
-    snprintf(singleRaylength,sizeof(singleRaylength),"Single ray length: %.2f",length);
+    size_t arS = 0;
+    TileToDraw* tileArray = NULL;
+
+    tileArray = raycasterCastRay(position, direction, map, &arS);
+    snprintf(singleRaylength,sizeof(singleRaylength),"Single ray length: %.2f",tileArray[0].rayLength);
     DrawText(singleRaylength,drawPos.x ,drawPos.y + (textSpacing * textNumber), fontSize,TEXT_COLOR);
     textNumber++;
+
+    char currentTileText[40];
+    TILE_TYPE tileType = (TILE_TYPE)tileArray[0].tile;
+    snprintf(currentTileText, sizeof(currentTileText), "Pointing at tile: %s", tileTypeToString(tileType));
+    DrawText(currentTileText, drawPos.x, drawPos.y + (textSpacing * textNumber), fontSize, TEXT_COLOR);
+    textNumber++;
+
+    if(tileArray != NULL){
+        free(tileArray);
+    }
+
 }
 
 void debugDrawPlayerRaySingle(Vector2 position, Vector2 direction, TILE_TYPE map[MAP_HEIGHT][MAP_WIDTH]){
 
-    float length = 0;
-    TILE_TYPE tile = EMPTY;
-    SIDE side = HORIZONTAL;
+    size_t arraySize = 0;
+    TileToDraw* tileArray = NULL;
+    Vector2 drawStartPosition = debugConvertToMinimapSize(position);
+    Vector2 drawEndPosition = {0.0f, 0.0f};
 
-    //raycasterCastRay(&length, &tile, &side, position, direction, map);
+    tileArray = raycasterCastRay(position, direction, map, &arraySize);
 
-    Vector2 endPosition = {
-        position.x + direction.x * length,
-        position.y + direction.y * length
-    };
+    for(size_t i = arraySize - 1; i != SIZE_MAX; i --){
 
-    position = debugConvertToMinimapSize(position);
+        drawEndPosition.x = position.x + tileArray[i].rayLength * direction.x;
+        drawEndPosition.y = position.y + tileArray[i].rayLength * direction.y;
 
-    endPosition = debugConvertToMinimapSize(endPosition);
+        drawEndPosition = debugConvertToMinimapSize(drawEndPosition);
 
-    DrawLineV(position,endPosition,GREEN);
+        DrawLineEx(drawStartPosition,drawEndPosition,3,RED);
+    }   
+
+
+    if(tileArray != NULL){
+        free(tileArray);
+    }
 }
 
 void debugDrawPlayerRayMulti(Vector2 startPosition, float startAngle, TILE_TYPE map[MAP_HEIGHT][MAP_WIDTH]){
     float rayAngle = startAngle - playerFOV/2;
     Vector2 rayDirection = (Vector2){cos(rayAngle),sin(rayAngle)};
-    float rayLength = 0;
+    size_t arraySize = 0;
+    TileToDraw* tileArray = NULL;
+    Vector2 drawStartPosition = debugConvertToMinimapSize(startPosition);
+    Vector2 drawEndPosition = {0.0f, 0.0f};
 
-    TILE_TYPE tile = EMPTY;
-    SIDE side = VERTICAL;
-
-
-
-
+    Color rayColor = RED;
+    
     for(size_t i = 1; i <= SCREEN_WIDTH; i++){
-        //raycasterCastRay(&rayLength,&tile, &side, startPosition, rayDirection, map);
+        tileArray = raycasterCastRay(startPosition, rayDirection, map, &arraySize);
+        rayColor = RED;
         
-        Vector2 endPosition = {
-        startPosition.x + rayDirection.x * rayLength,
-        startPosition.y + rayDirection.y * rayLength
-        };
+        for(size_t j = arraySize - 1; j != SIZE_MAX; j --){
+            rayColor.a = (unsigned char)(j+1)*2;
+            drawEndPosition.x = startPosition.x + tileArray[j].rayLength * rayDirection.x;
+            drawEndPosition.y = startPosition.y + tileArray[j].rayLength * rayDirection.y;
 
-        Vector2 drawStartPosition= debugConvertToMinimapSize(startPosition);
+            drawEndPosition = debugConvertToMinimapSize(drawEndPosition);
 
-        Vector2 drawEndPosition = debugConvertToMinimapSize(endPosition);
+            DrawLineEx(drawStartPosition,drawEndPosition,1,rayColor);
+        }  
 
-        DrawLineV(drawStartPosition,drawEndPosition,GREEN);
+        if(tileArray != NULL){
+            free(tileArray);
+        } 
 
         float rayAngleStepSize = playerFOV / SCREEN_WIDTH;
         rayAngle += rayAngleStepSize;

@@ -41,7 +41,7 @@ int main()
             debugDrawPlayerOnMiniMap(player.position, player.direction, map.grid);
             debugDrawInfo(player.position, player.direction, player.angle, map.grid);
             debugDrawPlayerRayMulti(player.position, player.angle, map.grid);
-
+            //debugDrawPlayerRaySingle(player.position, player.direction, map.grid);
         }
 
         EndDrawing();
