@@ -10,6 +10,7 @@
 	},
 	"files.associations": {
 		"constants.h": "c",
-		"raylib.h": "c"
+		"raylib.h": "c",
+		"map.h": "c"
 	}
 }

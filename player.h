@@ -20,8 +20,11 @@ Player playerCreate();
 void playerMove(Player * player,Map map);
 void playerRotate(Player* player);
 void playerChangeFOV();
+void playerChangeFOVForSprint(float change);
+void playerSprint();
 
-float playerFOV = 60 * DEG2RAD;
+float playerFOV = PLAYER_FOV;
+float playerMovementSpeed = PLAYER_MOVEMENT_SPEED;
 
 Player playerCreate(){
     return(Player){
@@ -42,8 +45,8 @@ void playerMove(Player * player, Map map){
 
     if(IsKeyDown(KEY_W)){
         
-        newPosition.x = player->position.x + player->direction.x * PLAYER_MOVEMENT_SPEED;
-        newPosition.y = player->position.y + player->direction.y * PLAYER_MOVEMENT_SPEED;
+        newPosition.x = player->position.x + player->direction.x * playerMovementSpeed;
+        newPosition.y = player->position.y + player->direction.y * playerMovementSpeed;
 
         if(mapGiveTileType(map.grid,newPosition) == EMPTY){
             player->position.x = newPosition.x;
@@ -51,8 +54,8 @@ void playerMove(Player * player, Map map){
         }
         
     }else if(IsKeyDown(KEY_S)){
-        newPosition.x = player->position.x - player->direction.x * PLAYER_MOVEMENT_SPEED;
-        newPosition.y = player->position.y - player->direction.y * PLAYER_MOVEMENT_SPEED;
+        newPosition.x = player->position.x - player->direction.x * playerMovementSpeed;
+        newPosition.y = player->position.y - player->direction.y * playerMovementSpeed;
         
         if(mapGiveTileType(map.grid,newPosition) == EMPTY){
             player->position.x = newPosition.x;
@@ -61,16 +64,16 @@ void playerMove(Player * player, Map map){
     }
 
     if(IsKeyDown(KEY_A)){
-        newPosition.x = player->position.x + cos(player->angle - 90 * DEG2RAD) * PLAYER_MOVEMENT_SPEED;
-        newPosition.y = player->position.y + sin(player->angle - 90 * DEG2RAD) * PLAYER_MOVEMENT_SPEED;
+        newPosition.x = player->position.x + cos(player->angle - 90 * DEG2RAD) * playerMovementSpeed;
+        newPosition.y = player->position.y + sin(player->angle - 90 * DEG2RAD) * playerMovementSpeed;
         
         if(mapGiveTileType(map.grid,newPosition) == EMPTY){
             player->position.x = newPosition.x;
             player->position.y = newPosition.y; 
         }
     }else if(IsKeyDown(KEY_D)){
-        newPosition.x = player->position.x + cos(player->angle + 90 * DEG2RAD) * PLAYER_MOVEMENT_SPEED;
-        newPosition.y = player->position.y + sin(player->angle + 90 * DEG2RAD) * PLAYER_MOVEMENT_SPEED;
+        newPosition.x = player->position.x + cos(player->angle + 90 * DEG2RAD) * playerMovementSpeed;
+        newPosition.y = player->position.y + sin(player->angle + 90 * DEG2RAD) * playerMovementSpeed;
         
         if(mapGiveTileType(map.grid,newPosition) == EMPTY){
             player->position.x = newPosition.x;
@@ -103,6 +106,33 @@ void playerChangeFOV(){
         playerFOV += changeSpeed;
     } else if(IsKeyDown(KEY_MINUS) && playerFOV > 15 * DEG2RAD){
         playerFOV -= changeSpeed;
+    }
+}
+
+void playerChangeFOVForSprint(float change){
+    const float changeLimit = 10.0f * DEG2RAD;
+    if((playerFOV <= PLAYER_FOV + changeLimit) && (playerFOV >= PLAYER_FOV - changeLimit)){
+        playerFOV += change;
+    }
+}
+
+void playerSprint(){
+
+    const float sprintAccel = playerMovementSpeed / 20;
+    const float sprintDecel = playerMovementSpeed / 20;
+
+    const float FOVChangeValue = 0.8f * DEG2RAD;
+
+    if(IsKeyDown(KEY_LEFT_SHIFT) && IsKeyDown(KEY_W)){
+        if(playerMovementSpeed <= PLAYER_MOVEMENT_SPEED_SPRINT_LIMIT){
+            playerMovementSpeed += sprintAccel;
+            playerFOV += FOVChangeValue;
+        }
+    }else{
+        if(playerMovementSpeed >= PLAYER_MOVEMENT_SPEED){
+            playerMovementSpeed -= sprintDecel;
+            playerFOV -= FOVChangeValue;
+        }
     }
 }
 

@@ -23,6 +23,7 @@ int main()
     while (!WindowShouldClose())    
     {
 
+        playerSprint();
         playerMove(&player,map);
         playerRotate(&player); 
         playerChangeFOV();
