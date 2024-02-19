@@ -34,6 +34,10 @@ Color rendererConvertTileToColor(TILE_TYPE tile){
     case GLASS:
         return (Color){20,60,220,60};
         break;
+
+    case DOOR:
+        return (Color){139, 69, 19};
+        break;
     
     default:
         return RED;
@@ -79,9 +83,12 @@ float rendererConvertToWallSize(TILE_TYPE tile){
         break;
 
     case SOLID: 
-        return 1.0f;
+        return 0.8f;
 
     case GLASS:
+        return 1.0f;
+
+    case DOOR:
         return 1.0f;
 
     default:
@@ -96,6 +103,7 @@ void rendererDrawWallsSolidColor(Vector2 startPosition, float startAngle,TILE_TY
 
     Vector2 drawPosisiton = {0.0f,0.0f};
     float drawHeight = 0.0f;
+    float basicHeight = 0.0f;
     float shadowPower = 0.0f;
     Color wallColor = {0,0,0,255};
 
@@ -122,7 +130,9 @@ void rendererDrawWallsSolidColor(Vector2 startPosition, float startAngle,TILE_TY
 
             drawPosisiton.x = i;
             drawHeight = (SCREEN_HEIGHT / tileArray[j].rayLength) * rendererConvertToWallSize(tileArray[j].tile);
-            drawPosisiton.y = (SCREEN_HEIGHT - drawHeight) / 2;
+            basicHeight = (SCREEN_HEIGHT / tileArray[j].rayLength);
+
+            drawPosisiton.y = ((SCREEN_HEIGHT - basicHeight) / 2) + basicHeight - drawHeight;
 
             if(tileArray[j].side == VERTICAL){
                 shadowPower = tileArray[j].rayLength * SHADOW_POWER;
