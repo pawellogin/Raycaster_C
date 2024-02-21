@@ -13,7 +13,8 @@ typedef enum TILE_TYPE {
     EMPTY = 0,
     SOLID = 1,
     BARRIER = 2,
-    GLASS = 3
+    GLASS = 3,
+    DOOR = 4
 } TILE_TYPE;
 
 typedef enum SIDE {

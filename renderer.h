@@ -83,7 +83,7 @@ float rendererConvertToWallSize(TILE_TYPE tile){
         break;
 
     case SOLID: 
-        return 0.8f;
+        return 1.2f;
 
     case GLASS:
         return 1.0f;
